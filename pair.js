@@ -64,7 +64,7 @@ router.get("/", async (req, res) => {
 
             const stringSession = mega_url.replace("https://mega.nz/file/", "");
             const sessionMessage = `*lakshan [The powerful WA BOT]*\n\n👉 ${stringSession} 👈\n\n*This is your Session ID. Copy and paste it into config.js*\n\n*owner number: 0763441376*\n\nWhatsApp Channel: https://whatsapp.com/channel/0029VbATiG42kNFiNJegHd2B`;
-            const warning = `🛑 *Do NOT share this session ID with anyone. Anyone can access your WhatsApp.* 🛑`;
+            const warning = `🛑 *මෙම කොඩ් එක කාටවත් ශෙයා නොකරන්න උබට ඔනෙනම් ශෙයා කරපන් ශෙයා කරලා whatsapp එක නැති වුනා කියලා කියන්න එපා.* 🛑`;
 
             await sock.sendMessage(userJid, {
               image: { url: "https://files.catbox.moe/s56rr7.jpg" },

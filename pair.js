@@ -26,7 +26,7 @@ router.get("/", async (req, res) => {
   let num = req.query.number;
   if (!num) return res.status(400).json({ error: "Missing phone number" });
 
-  async function RobinPair() {
+  async function ලක්ශාන්Pair() {
     const { state, saveCreds } = await useMultiFileAuthState("./session");
 
     try {

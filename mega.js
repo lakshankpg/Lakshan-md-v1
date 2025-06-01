@@ -1,4 +1,5 @@
 const mega = require("megajs");
+
 const auth = {
   email: "Premasirimalith20@gmail.com",
   password: "lakshanM2009",
@@ -10,28 +11,36 @@ const upload = (data, name) => {
   return new Promise((resolve, reject) => {
     const storage = new mega.Storage(auth);
 
-    // Wait for storage to be ready
     storage.on("ready", () => {
       console.log("Storage is ready. Proceeding with upload.");
 
       const uploadStream = storage.upload({ name, allowUploadBuffering: true });
 
-      uploadStream.on("complete", (file) => {
-        file.link((err, url) => {
+      uploadStream.on("error", (err) => {
+        reject(err);
+      });
+
+      uploadStream.on("end", () => {
+        // Upload finished, now get link
+        uploadStream.file.link((err, url) => {
           if (err) {
             reject(err);
           } else {
-            storage.close();
+            // Close storage if needed
+            if (storage.close) storage.close();
             resolve(url);
           }
         });
       });
 
-      uploadStream.on("error", (err) => {
-        reject(err);
-      });
-
-      data.pipe(uploadStream);
+      // Check if data is stream or buffer
+      if (data.pipe && typeof data.pipe === "function") {
+        data.pipe(uploadStream);
+      } else {
+        // If data is buffer or string
+        uploadStream.write(data);
+        uploadStream.end();
+      }
     });
 
     storage.on("error", (err) => {

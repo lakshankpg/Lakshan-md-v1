@@ -9,7 +9,7 @@
     "restart": "pm2 restart lakshan"
   },
   "dependencies": {
-    "@whiskeysockets/baileys":"github:WhiskeySockets/Baileys",
+    "@whiskeysockets/baileys": "^6.7.9",
     "pino": "^9.6.0",
     "pm2": "^5.4.3",
     "util": "^0.12.5",

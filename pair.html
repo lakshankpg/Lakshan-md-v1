@@ -1,249 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PAIR CODE</title>
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-  />
-  <style>
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      background-color: #0000FF;
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: cover;
-      font-family: Arial, sans-serif;
-      color: #fff;
-    }
+b.addEventListener("click", async (e) => {
+  e.preventDefault();
+  if (!c.value) {
+    a.innerHTML = '<a style="color:black;font-weight:bold">❗Enter your whatsapp number with country code.</a><br /><br />';
+    return;
+  }
 
-    .container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+  const digitsOnly = c.value.replace(/[^0-9]/g, "");
+  if (digitsOnly.length < 11) {
+    a.innerHTML = '<a style="color:black;font-weight:bold">❗Invalid number format. Please try again.</a><br /><br />';
+    return;
+  }
 
-    .box {
-      width: 300px;
-      height: 330px;
-      padding: 20px;
-      text-align: center;
-      background-color: #a20000;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
-      position: relative;
-    }
+  let formattedNumber = "";
+  digitsOnly.split("").forEach((char, idx) => {
+    formattedNumber += char;
+    if (idx === 2 || idx === 7) formattedNumber += " ";
+  });
 
-    #text {
-      color: #ffffff;
-    }
+  c.type = "text";
+  c.value = "+" + formattedNumber;
+  c.style.color = "white";
+  c.style.fontSize = "20px";
 
-    .input-container {
-      display: flex;
-      background: #FF0000;
-      border-radius: 1rem;
-      padding: 0.3rem;
-      gap: 0.3rem;
-      max-width: 300px;
-      width: 100%;
-    }
+  document.getElementById("loading-spinner").style.display = "block";
+  a.innerHTML = ""; // Clear previous content
 
-    .input-container input {
-      border-radius: 0.8rem 0 0 0.8rem;
-      background:#0000FF;
-      width: 89%;
-      flex-basis: 75%;
-      padding: 1rem;
-      border: none;
-      border-left: 2px solid #075e54;
-      color: #ecf0f1;
-      transition: all 0.2s ease-in-out;
-    }
-
-    .input-container input:focus {
-      border-left: 2px solid #075e54;
-      outline: none;
-      box-shadow: inset 13px 13px 10px #075e54, inset -13px -13px 10px #2c3e50;
-    }
-
-    .input-container button {
-      flex-basis: 25%;
-      padding: 1rem;
-      background: ##0000FF;
-      font-weight: 900;
-      letter-spacing: 0.3rem;
-      text-transform: uppercase;
-      color: white;
-      border: none;
-      width: 100%;
-      border-radius: 0 1rem 1rem 0;
-      transition: all 0.2s ease-in-out;
-      cursor: pointer;
-    }
-
-    .input-container button:hover {
-      background: #0000FF;
-    }
-
-    #waiting-message {
-      color: #ffffff;
-      margin-top: 10px;
-    }
-
-    @media (max-width: 500px) {
-      .input-container {
-        flex-direction: column;
-      }
-
-      .input-container input {
-        border-radius: 0.8rem;
-      }
-
-      .input-container button {
-        padding: 1rem;
-        border-radius: 0.8rem;
-      }
-    }
-
-    .centered-text {
-      color: #ffffff;
-      text-align: center;
-    }
-
-    /* Loading spinner styles */
-    #loading-spinner {
-      display: none;
-      color: white;
-      margin-top: 10px;
-    }
-
-    .fa-spinner {
-      animation: spin 2s linear infinite;
-    }
-
-    @keyframes spin {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="main">
-      <div class="box" id="box">
-        <div id="text">
-          <i class="fa fa-user"></i>
-          <div>
-            <h3 class="centered-text">Link ලක්ශාන් md  with phone number</h3>
-            <br />
-            <h6>🔢 Enter your number with country code.ලක්ශාන් md WEB PAIR</h6>
-            <div class="input-container">
-              <input
-                type="text"
-                id="number"
-                placeholder="+947627xxxxxx"
-                name="phone"
-              />
-              <button id="submit">Submit lakshan md</button>
-            </div>
-            <!-- Loading spinner -->
-            <div id="loading-spinner">
-              <i class="fas fa-spinner fa-spin"></i>
-            </div>
-            <br />
-            <br />
-            <main id="pair"></main>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"></script>
-  <script>
-    const a = document.getElementById("pair");
-    const b = document.getElementById("submit");
-    const c = document.getElementById("number");
-
-    async function Copy() {
-      const obj = document.getElementById("copy");
-      const originalText = obj.innerText;
-      try {
-        await navigator.clipboard.writeText(
-          obj.innerText.replace("CODE: ", "")
-        );
-        obj.innerText = "✔️ COPIED";
-        obj.style.color = "blue";
-        obj.style.fontWeight = "bold";
-        setTimeout(() => {
-          obj.innerText = originalText;
-          obj.style.color = "white";
-          obj.style.fontWeight = "bold";
-        }, 500);
-      } catch (err) {
-        console.error("Clipboard copy failed:", err);
-      }
-    }
-
-    b.addEventListener("click", async (e) => {
-      e.preventDefault();
-      if (!c.value) {
-        a.innerHTML =
-          '<a style="color:black;font-weight:bold">❗Enter your whatsapp number with country code.</a><br /><br />';
-        return;
-      }
-
-      // Strip all non-digit characters for length check
-      const digitsOnly = c.value.replace(/[^0-9]/g, "");
-      if (digitsOnly.length < 11) {
-        a.innerHTML =
-          '<a style="color:black;font-weight:bold">❗Invalid number format. Please try again.</a><br /><br />';
-        return;
-      }
-
-      // Format number with spaces at positions 3 and 8
-      let formattedNumber = "";
-      digitsOnly.split("").forEach((char, idx) => {
-        formattedNumber += char;
-        if (idx === 2 || idx === 7) formattedNumber += " ";
-      });
-
-      c.type = "text";
-      c.value = "+" + formattedNumber;
-      c.style.color = "white";
-      c.style.fontSize = "20px";
-
-      // Show spinner
-      document.getElementById("loading-spinner").style.display = "block";
-      a.innerHTML = ""; // Clear previous content
-
-      try {
-        const response = await axios(`/code?number=${digitsOnly}`);
-        const code = response.data.code || "❗ Service Unavailable";
-        a.innerHTML =
-          '<font id="copy" onclick="Copy()" style="color:blue;font-weight:bold; cursor:pointer;" size="5">' +
-          "CODE: <span style='color:black;font-weight:bold'>" +
-          code +
-          "</span></font><br /><br /><br />";
-      } catch (error) {
-        a.innerHTML =
-          '<a style="color:black;font-weight:bold">❗Failed to fetch code. Please try again later.</a><br /><br />';
-        console.error(error);
-      } finally {
-        // Hide spinner
-        document.getElementById("loading-spinner").style.display = "none";
-      }
-    });
-  </script>
-</body>
-  </html>
+  try {
+    const response = await axios.get(`https://your-replit-project.replit.app/code?number=${digitsOnly}`);
+    const code = response.data.code || "❗ Service Unavailable";
+    a.innerHTML = '<font id="copy" onclick="Copy()" style="color:blue;font-weight:bold; cursor:pointer;" size="5">CODE: <span style="color:black;font-weight:bold">' + code + '</span></font><br /><br /><br />';
+  } catch (error) {
+    a.innerHTML = '<a style="color:black;font-weight:bold">❗Failed to fetch code. Please try again later.</a><br /><br />';
+    console.error(error);
+  } finally {
+    document.getElementById("loading-spinner").style.display = "none";
+  }
+});
